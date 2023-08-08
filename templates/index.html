@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <link rel="stylesheet" type="text/css" href="./static/styles.css">
+
+</head>
+
+
+<body>
+
+
+  
+  <form action="/" method="POST">
+
+    <label for="text-input">Title:</label>  
+    <input type="text" id="title" name="title"><br><br>
+    
+    <label for="text-input">Catergory:</label>  
+    <input type="text" id="Catergory" name="Catergory"><br><br>
+    
+    <label for="text-input">Sub-Category:  </label>  
+    <input type="text" id="Sub-Category" name="Sub-Category"><br><br>
+
+
+    
+    <textarea id="text-input" name="text" rows="4" cols="50"></textarea>
+    <br>
+    <button type="submit">Submit</button>
+
+
+
+
+
+    <br>
+
+
+
+    <label for ="cat" id = "cat"> Filter by Catergory</label>
+    <select name = "cat" id = "cat">
+        
+        {% for item in cate_list %}
+          <option value = "{{item}}">{{item}}</option>
+        {% endfor %}
+
+        
+    </select>
+
+
+    
+    <label for ="subcat" id = "subcat"> Filter by Sub-Catergory</label>
+    <select name = "subcat" id = "subcat">
+        
+        {% for item in sub_cate_list %}
+          <option value = "{{item}}">{{item}}</option>
+        {% endfor %}
+    </select>
+
+    <input type = "submit" value = "Filter">
+
+
+
+
+
+
+
+
+
+
+    <div class="sticky-container">
+      
+    {{notelist | safe }}       
+
+    </div>
+
+
+  
+  
+  </form>
+  
+  
+  
+  
+  
+  
+  
+ 
+  
+  
+  
+  
+  
+  </div>
+</body>
+</html>

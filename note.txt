@@ -1,0 +1,128 @@
+
+Title: ExpressRoute
+Catergory: Azure
+Sub-Category: AZ-104
+
+- between Azure and on-premise
+- through private connection
+	-> reliable
+	-> fast
+	-> high security
+	-> consistent latency
+- common to have more than 1 connection
+
+
+Title: Subnet mask:
+Catergory: Azure
+Sub-Category: AZ-104
+
+for each IP, there are Network and Host part
+- number of network is determined by Subnet mask:
+	-> from left to right of subnet, if digit = 1 then network, after that is host
+	-> IP address:      172.16.1.0    (10101100.00010000.00000001.00000000)
+	-> Subnet mark:     255.255.224.0 (11111111.11111111.11100000.00000000)
+	-> from above case: <mark>first 19 digit = network, last 13 digits = host</mark>
+
+- purpose for separate them:
+	-> easy management
+	-> route can quickly search the specific IP
+
+
+Title: Class of Subnet
+Catergory: Azure
+Sub-Category: AZ-104
+
+
+Class A: 255.0.0.0
+
+Class B: 255.255.0.0
+
+Class C: 255.255.255.0
+
+- Class A is better for large company as more number of host can be provided
+
+
+
+
+
+
+Title: bat call venv + python
+Catergory: Python
+Sub-Category: Python
+
+
+
+@echo off
+
+call .\Material\my_env\Scripts\activate.bat
+
+start python Material\main.py
+
+timeout /t 10
+
+start http://127.0.0.1:5000
+
+exit
+
+
+
+
+
+
+
+
+
+Title: 5 kinds of temporal windowing function
+Catergory: Azure
+Sub-Category: DP-203
+
+
+1. TumblingWindow(minute, 1) : reading value for each 1 minute, non-overlapping
+2. HoppingWindow(second, 60, 30) : read every 30 seconds and 60 seconds for each read
+3. SlidingWindow(minute, 1) + having count(*) >3  : read for 10 seconds before a event,  if each event have recorded by three times, then alert
+4. SessionWindow(second, 20, 60) : record 20 seconds if one event occur, if meet one more event, then  extend 20 second for this trigger, but no more than 60 seconds for each recording
+5. System.Timestamp() (Snapshot) : record only for the event occur
+
+
+Title: SCD Type
+Catergory: Other
+Sub-Category: Other
+
+SCD TYPE1: UPDATE
+
+SCD TYPE2: INSERT NEW RECORD
+
+SCD TYPE3: ANOTHER COLUMN TO STORE PREVIOUS VALUE
+
+
+Title: SQL vs Lake database in Azure
+Catergory: Azure
+Sub-Category: DP-203
+
+sql database:
+- table  = physical table
+- external table : cache of data in data lake with metadata which updated on row data will not reflected on it
+
+
+
+lake database:
+- managed table: have a parquet file in data lake's synapse folder, if delete this table, the parquet file also dropped
+- external table: path of the raw data in data lake
+- the changes on the raw data in data lake will reflected on both managed and external table
+
+
+Title: SQL Log
+Catergory: Other
+Sub-Category: SQL
+
+BEGIN TRY SET @lineno = 1/0 END TRY BEGIN CATCH SET @msg =  'line ' + cast(ERROR_LINE() as varchar(10) ) +'  ' + convert(varchar, getdate(), 109)   END CATCH RAISERROR (@msg, 0, 1) WITH NOWAIT
+
+
+
+Title: Edit all occurrences 
+Catergory: Other
+Sub-Category: VS Code
+
+shortcut for edit all the occurrences at the same time
+
+¡§CTRL + SHIFT + L¡¨
