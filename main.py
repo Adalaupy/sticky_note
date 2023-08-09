@@ -146,7 +146,7 @@ def to_html(cat_filter,sub_filter):
 
         for line in content.splitlines():
             
-            if "->" in line:
+            if "->" in line.strip()[0:2]:
                 
                 new_line = "\n <dd>" + line + "</dd> " 
             
@@ -185,7 +185,7 @@ def write_txt(new_record,title,Catergory,Sub_Category):
 
         new_line = line.strip() + "\n"
 
-        if "->" in new_line:
+        if "->" in new_line.strip()[0:2]:
             new_line = "\t" + new_line
         
         append_record += new_line

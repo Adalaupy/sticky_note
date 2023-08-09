@@ -8,10 +8,10 @@
 .sticky {
 background-color: #FCE38A;
 padding: 20px;
-width: 700px;
+width: 950px;
 min-height: 100px;
 position: relative;
-top: 50px;
+top: 20px;
 border-radius: 10px;
 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 font-family: 'verdana', sans-serif;
@@ -30,11 +30,15 @@ text-align: left;
   font-size: 8px;
   text-align:right ;
   margin-bottom: 2px;
+  color: red;
+  font-weight: bold;
 }
 .sticky-subcat {
   font-weight:lighter;
   font-size: 8px;
   text-align:right ;
+  color: red;
+  font-weight: bold;
 }
 
 .container {
@@ -87,6 +91,10 @@ button[type="submit"]:hover {
 mark {
   background-color: rgb(100, 246, 153);
   color: black;
+}
+
+select {
+  margin-right: 10px;
 }
 
 

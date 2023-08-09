@@ -126,3 +126,6 @@ Sub-Category: VS Code
 shortcut for edit all the occurrences at the same time
 
 ¡§CTRL + SHIFT + L¡¨
+
+
+
