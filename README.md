@@ -7,6 +7,7 @@
 
 
 # General Information
+This project is simply designed for jotting notes and displayed like a sticky note wall on a webpage, the notes can be categorized which would be used for filtering.
 
 
 # Step of Using
@@ -14,7 +15,7 @@
 ```
 python main.py
 ```
-
+2. jot notes here
 
 
 
