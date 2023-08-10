@@ -129,3 +129,226 @@ shortcut for edit all the occurrences at the same time
 
 
 
+
+
+Title: Summary of Azure Network
+Catergory: Azure
+Sub-Category: AZ-900
+
+<pre>
++----------------------------+------------------------------------------------------------------------+
+| Virtual Network Gateway    | - site-to-site                                                         |
+|                            | - point-to-site                                                        |
+|                            | - network-to-network                                                   |
+|                            | (Can choose VPN/ExpressRoute, Route/Policy based )                     |
++----------------------------+------------------------------------------------------------------------+
+| Local Network gateway      | on-premise -> Virtual network (Public Internet)                        |
++----------------------------+------------------------------------------------------------------------+
+| ExpressRoute               | on-premise -> Virtual network (Private + high speed)                   |
++----------------------------+------------------------------------------------------------------------+
+| gateway subnet             | - subnet within Azure Virtual Network                                  |
+|                            | - for hosting virtual network gateway (used together)                  |
++----------------------------+------------------------------------------------------------------------+
+| Network Security Gateway   | - filter traffic flow in and out                                       |
+| (NSGs)                     | - based on IP, Port, Protocol                                          |
+|                            | - separately for each Virtual Network and subnet                       |
++----------------------------+------------------------------------------------------------------------+
+| Azure Firewall             | - more advanced                                                        |
+|                            | - app-level, URL, traffic filtering                                    |
+|                            | - centralized management and policy enforcement across Virtual Network |
++----------------------------+------------------------------------------------------------------------+
+| Service endpoints          | - directly from Virtual Network to Azure Services                      |
+|                            | - without exposing the traffic to public internet                      |
++----------------------------+------------------------------------------------------------------------+
+| application security group | - group VMs                                                            |
+| (ASGs)                     | - define network security police                                       |
+|                            | - on top of NSGs                                                       |
++----------------------------+------------------------------------------------------------------------+
+| Peering                    | - connect Virtual Network and Microsoft's global network               |
++----------------------------+------------------------------------------------------------------------+
+
+
+Azure Traffic Manager profile
+- DNS-based traffic load balancer
+e.g:
+1. the web application located in 3 region(east us,west us and europe),
+2. if client request this website, the traffic manager profile detect the geographic location of client (Europe)
+3. route the client to Europe Endpoints as it is nearest
+
+</pre>
+
+
+Title: Azure storage services
+Catergory: Azure
+Sub-Category: Azure
+
+<pre>
++---------------+------------------------------------------------------+
+| Blob storage  | - all file format                                    |
+|               | - massive                                            |
++---------------+------------------------------------------------------+
+| file storage  | - standard Server Message Block(SMB) -> Linux/ macOS |
+|               | - Network File System(NFS) protocols -> Window       |
+|               | - shared access                                      |
++---------------+------------------------------------------------------+
+| Queue storage | - storing large of message                           |
+|               | - https/http                                         |
++---------------+------------------------------------------------------+
+| Disk storage  | - manage disk                                        |
+|               | - used with Azure VM                                 |
++---------------+------------------------------------------------------+
+</pre>
+
+Storage tier:
+	-> Hot access tier: accessed frequently
+	-> Cool access tier: infrequently and store for at least 30 days
+	-> Archive access tier: rarely access and store for at least 180 days, flexible latency requirement
+
+
+
+
+Title: Azure Monitor tool
+Catergory: Azure
+Sub-Category: Azure
+
+<pre>
++------------------------------------+-----------------------------------------------------------------+
+| Azure Monitor                      | - monitor apps,OS,resource,subscription,tenant and log data     |
+|                                    | - visualize data                                                |
+|                                    | - run query on the data gathered and analyze                    |
+|                                    | - alert for performance, availability and usage                 |
+|                                    | - integrate with logic app/export APIs and auto remediate       |
++------------------------------------+-----------------------------------------------------------------+
+| Azure Advisor                      | - improve performance and achieve process efficiency            |
+|                                    | - optimize resource/services and reduce cost                    |
++------------------------------------+-----------------------------------------------------------------+
+| Azure Service Health               | - alert for outage incident and events that impact the services |
+|                                    | - root cause analyses (RCAs)                                    |
+|                                    | - how to avoid services interruption                            |
++------------------------------------+-----------------------------------------------------------------+
+| Trust Center                       | - a website                                                     |
+|                                    | - security standards for protecting data                        |
+|                                    | - how implement security,privacy,compliance in Azure Product    |
++------------------------------------+-----------------------------------------------------------------+
+| Azure Arc                          | - manage hybrid and multi-cloud environment                     |
+|                                    | - use familiar Azure services                                   |
+|                                    | - continue use traditional ITOps                                |
++------------------------------------+-----------------------------------------------------------------+
+| Azure Resource Manage and Template | - JSON file define what to deploy                               |
+|                                    | - include network,VM,storage,account etc                        |
+|                                    | - repeat deploy multiple environment                            |
++------------------------------------+-----------------------------------------------------------------+
+| Microsoft Defender for Cloud       | - defend both Azure, On-premise and other clouds                |
+|                                    | - detect anomalous behavior                                     |
+|                                    | - detect and respond to security threats in real-time           |
+|                                    | - compliance assessments and recommendation                     |
+|                                    | - protect sensitive data access                                 |
++------------------------------------+-----------------------------------------------------------------+
+</pre>
+
+
+Title: Azure Support plan
+Catergory: Azure
+Sub-Category: AZ-900
+
+<pre>
+
++----------------------+-----------------+-------------------+------------------+------------------------+
+|                      |      Basic      |      Developer    |     Standard     |   Professional direct  |
++----------------------+-----------------+-------------------+------------------+------------------------+
+|                      | Request support |                    Purchase support                           |
++----------------------+-----------------+-------------------+------------------+------------------------+
+|         Price        |        -        |   $29 per month   |  $100 per month  |     $1000 per month    |
++----------------------+-----------------+-------------------+------------------+------------------------+
+|  third party support |        -        |                             Yes                               |
++----------------------+-----------------+-------------------+------------------+------------------------+
+|     24/7 support     |        -        | email only during |                     Yes                   |
+|    (email + phone)   |                 |   business hour   |                                           |
++----------------------+-----------------+-------------------+------------------+------------------------+
+| response time by     |        -        | Minimal: 8        | Minimal: 8       | Minimal: 4             |
+| Case Severity        |                 |                   | Moderate: 4      | Moderate: 2            |
+|                      |                 |                   | Critical: 1      | Critical: 1            |
++----------------------+-----------------+-------------------+------------------+------------------------+
+| Architecture support |        -        |          General guidance            | from ProDirect manager |
++----------------------+-----------------+-------------------+------------------+------------------------+
+
+</pre>
+
+
+Only Professional direct:
+- support API
+- Operation support(Service review + advise)
+- Training
+- proactive guidance
+
+All:
+- 24/7 help resource (video,documentation, community support)
+- ability to submit as many support ticket as you need
+- Azure advisor
+- Azure health status and notification
+
+
+Title: Azure App Service pricing:
+Catergory: Azure
+Sub-Category: Azure
+
+<pre>
+
++------------------------------+--------+-------------+-------------+------------+------------+------------+
+|                              | Free   | Shared      | Basic       | Standard   | Premium    | Isolated   |
++------------------------------+--------+-------------+-------------+------------+------------+------------+
+| Disk Space                   | 1 GB   | 1 GB        | 10 GB       | 50 GB      | 250 GB     | 1 TB       |
++------------------------------+--------+-------------+-------------+------------+------------+------------+
+| Web,mobile,API app           | 10     | 100         |                        unlimited                   |
++------------------------------+--------+-------------+-------------+------------+------------+------------+
+| max instance                 | -      | -           | up to 3     | up to 10   | up to 30*  | up to 100  |
++------------------------------+--------+-------------+-------------+------------+------------+------------+
+| Auto Scale                   | -      | -           |             |                 support              |
++------------------------------+--------+-------------+-------------+------------+------------+------------+
+| Hybrid Connectivity          | -      | -           |                                                    |
++------------------------------+        |             |                                                    |
+| Virtual Network Connectivity |        |             |                         support                    |
++------------------------------+        |             |                                                    |
+| Private Endpoints            |        |             |                                                    |
++------------------------------+--------+-------------+-------------+------------+------------+------------+
+| Compute Type                 |    Shared            |               Dedicated               | Isolated   |
++------------------------------+--------+-------------+-------------+------------+------------+------------+
+| Pay as you go price          | Free   | $0.013/hour | $0.075/hour | $0.10/hour | $0.20/hour | $0.40/hour |
++------------------------------+--------+-------------+-------------+------------+------------+------------+
+</pre>
+
+
+Title: Reason of Using Elastic pool for SQL database
+Catergory: Azure
+Sub-Category: Azure
+
+Suppose you have 2 databases:
+
+DB1: maximum usage is 20DTU, mostly spend on morning
+DB2: maximum usage is 20DTU, mostly spend at night
+
+- each database require 20 DTU to avoid downtime, then total 40 DTU is required
+- one database under heavy load and other one is under light loads
+- Combine them into single pool, the maximum usage maybe still lower than 40 DTU
+
+
+Title: Concept of SD WAN
+Catergory: Azure
+Sub-Category: Network
+
+Method of connectivity between sites (WAN Types):
+- Broadband
+- Metro-ethernet
+- T1
+- MPLS
+- LTE
+
+
+Why SD-WAN:
+1. Companies have more than one sites
+2. kinds of connectivity based on location/availability
+3. each site have its combination of connectivity
+4. each connection of site is managed separately
+5. SD-WAN combine all the separated network into one encrypted network
+6. all different network become a single entity and controlled in a single point
+

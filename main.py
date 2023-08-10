@@ -139,7 +139,8 @@ def to_html(cat_filter,sub_filter):
         category =     f"<div class='sticky-cat'>     {item['category']}     </div>"
         sub_category = f"<div class='sticky-subcat'>  {item['sub_category']}      </div>"
         content =      f" {item['content']}    " 
-            
+
+
         
 
         new_content = "<br>\n  "
@@ -161,7 +162,8 @@ def to_html(cat_filter,sub_filter):
 
 
         post_html += this_html_item    
-    
+
+
     
     
     return post_html,category_list,sub_cat_filter
