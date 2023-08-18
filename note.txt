@@ -47,7 +47,7 @@ Class C: 255.255.255.0
 
 
 Title: bat call venv + python
-Catergory: Python
+Catergory: Coding
 Sub-Category: Python
 
 
@@ -86,7 +86,7 @@ Sub-Category: DP-203
 
 Title: SCD Type
 Catergory: Other
-Sub-Category: Other
+Sub-Category: Data Engineering
 
 SCD TYPE1: UPDATE
 
@@ -180,7 +180,7 @@ e.g:
 
 Title: Azure storage services
 Catergory: Azure
-Sub-Category: Azure
+Sub-Category: AZ-900
 
 <pre>
 +---------------+------------------------------------------------------+
@@ -209,7 +209,7 @@ Storage tier:
 
 Title: Azure Monitor tool
 Catergory: Azure
-Sub-Category: Azure
+Sub-Category: AZ-900
 
 <pre>
 +------------------------------------+-----------------------------------------------------------------+
@@ -290,7 +290,7 @@ All:
 
 Title: Azure App Service pricing:
 Catergory: Azure
-Sub-Category: Azure
+Sub-Category: AZ-900
 
 <pre>
 
@@ -320,7 +320,7 @@ Sub-Category: Azure
 
 Title: Reason of Using Elastic pool for SQL database
 Catergory: Azure
-Sub-Category: Azure
+Sub-Category: Data Engineering
 
 Suppose you have 2 databases:
 
@@ -346,9 +346,359 @@ Method of connectivity between sites (WAN Types):
 
 Why SD-WAN:
 1. Companies have more than one sites
-2. kinds of connectivity based on location/availability
-3. each site have its combination of connectivity
-4. each connection of site is managed separately
+2. using which kinds of connectivity is based on location/availability
+3. each site have its combination of connectivity (private/public)
+4. each connection is managed separately
 5. SD-WAN combine all the separated network into one encrypted network
 6. all different network become a single entity and controlled in a single point
 
+
+
+Title: Virtual WAN
+Catergory: Azure
+Sub-Category: Network
+
+
+<img src="https://learn.microsoft.com/en-us/azure/virtual-wan/media/sd-wan-connectivity-architecture/hybrid.png#lightbox" width=60% >
+- deploying VNet on the edge of a region (Hubs)
+- connect on-premise to Hub
+- fastest route to Azure
+
+
+<b>interconnection of Virtual WAN with SD-WAN</b>
+
+1. Direct Interconnect mode
+- SD WAN CPE (right) connect to Virtual Hub directly via IPsec
+- Branches connected via private SD-WAN
+
+
+2. Direct Interconnect model with NVA-in-VWAN-hub
+- Branch connect to NVA in virtual hub
+
+
+3. Direct Interconnect model with NVA-in-VWAN-hub
+- Branch connect to NVA in virtual hub
+
+
+<a href="https://learn.microsoft.com/en-us/azure/virtual-wan/sd-wan-connectivity-architecture">Here for more information</a>
+
+Title: Delta Lake table
+Catergory: Azure
+Sub-Category: DP-203
+
+Delta Lake table
+
+- easiest way to create is save a dataframe via pyspark
+<pre>
+<code>
+
+from delta.tables import *
+from pyspark.sql.functions import *
+
+# Create a deltaTable object
+deltaTable = DeltaTable.forPath(spark, delta_table_path)
+
+# Update the table (reduce price of accessories by 10%)
+deltaTable.update(
+condition = "Category == 'Accessories'",
+set = { "Price": "Price * 0.9" })
+
+</code>
+</pre>
+
+Querying a previous version of a table
+<pre>
+<code>
+df = spark.read.format("delta").option("versionAsOf", 0).load(delta_table_path)
+
+#or
+
+df = spark.read.format("delta").option("timestampAsOf", '2022-01-01').load(delta_table_path)
+</code>
+</pre>
+
+Title: Synapse Analytics dedicated SQL Pool Distribution
+Catergory: Azure
+Sub-Category: DP-203
+
+- Azure Synapse Analytics dedicated SQL Pool use Massively parallel architecture
+- data distributied across a pool of nodes
+
+- supported distribution:	
+	-> Hash: one of the columns is designated as the distribution column
+	<dd><img src="https://www.sqlshack.com/wp-content/uploads/2021/09/azure-synapse-hash-distribution_gray.png" alt="hash"></dd>
+	-> Round-robin: distributed equally, no specific key
+	-> Replicated: copy of table stored on each compute node
+
+
+Title: Load file into Data warehouse
+Catergory: Azure
+Sub-Category: DP-203
+
+SQL code:
+
+<pre>
+<code>
+COPY INTO dbo.StageProducts
+(ProductID, ProductName, ProductCategory, Color, Size, ListPrice, Discontinued)
+FROM 'https://mydatalake.blob.core.windows.net/data/stagedfiles/products/*.parquet'
+WITH
+(
+FILE_TYPE = 'PARQUET',
+MAXERRORS = 0,
+IDENTITY_INSERT = 'OFF'
+);
+
+</code>
+</pre>
+
+
+Title: SQL ranking window function
+Catergory: Azure
+Sub-Category: DP-203
+
+
+1. ROW_NUMBER: return ordinal position without duplication
+2. RANK: return ranked position, same rank with same value then skip the next rank, e.g. 1,2,2,4
+3. DENSE_RANK: same as RANK but don't skip the next one after duplication
+4. NTILE: divide rows into specific number of group, e.g. NTILE(3)
+
+
+Approximate count:
+- APPROX_COUNT_DISTINCT()
+- a maximum error rate of 2% with 97% probability
+- use it when precise count is not required
+
+
+Title: SQL Merge
+Catergory: Azure
+Sub-Category: DP-203
+
+"Merge" statement in SQL
+- perform upsert
+- Insert new Record + update existing Record
+
+<pre>
+<code>
+MERGE dbo.DimProduct AS tgt
+USING (SELECT * FROM dbo.StageProducts) AS src
+ON src.ProductID = tgt.ProductBusinessKey
+
+
+
+WHEN MATCHED THEN
+-- Type 1 updates
+	UPDATE SET
+	tgt.ProductName = src.ProductName,
+	tgt.ProductCategory = src.ProductCategory,
+	tgt.Color = src.Color,
+	tgt.Size = src.Size,
+	tgt.ListPrice = src.ListPrice,
+	tgt.Discontinued = src.Discontinued
+
+
+WHEN NOT MATCHED THEN
+	-- New products
+	INSERT VALUES
+	(src.ProductID,
+	src.ProductName,
+	src.ProductCategory,
+	src.Color,
+	src.Size,
+	src.ListPrice,
+	src.Discontinued);
+
+</code>
+</pre>
+
+
+Title: rebuild table index
+Catergory: Azure
+Sub-Category: DP-203
+
+- After loading new data into the data warehouse
+
+<pre>
+<code>
+-- Rebuild indexes
+ALTER INDEX ALL ON dbo.DimProduct REBUILD
+
+-- Update statistics
+CREATE STATISTICS productcategory_stats
+ON dbo.DimProduct(ProductCategory);
+
+</code>
+</pre>
+
+
+Title: Manage workloads in Azure Synapse Analytics
+Catergory: Azure
+Sub-Category: DP-203
+
+
+1) Workload Classification
+- simpliest and most common way: load and query
+	-> load: insert, update, delete
+	-> query: select
+- subclassification of query:
+	-> cube refreshes
+	-> dashboard queries
+	-> ad-hoc queries
+- statement which do not require resource are not able to classfied
+	-> DBCC
+	-> BEGIN
+	-> COMMIT
+	-> ROLLBACK
+
+
+
+2. Workload importance
+- influence the order of a request get access to resource
+- 5 levels:
+	-> low
+	-> below_normal
+	-> normal
+	-> above_normal
+	-> high
+
+
+=> create a workload classifier to add importance to certain query
+<code>
+IF EXISTS (SELECT * FROM sys.workload_management_workload_classifiers WHERE name = 'CEO')
+BEGIN
+DROP WORKLOAD CLASSIFIER CEO;
+END
+CREATE WORKLOAD CLASSIFIER CEO
+WITH (WORKLOAD_GROUP = 'largerc'
+,MEMBERNAME = 'asa.sql.workload01',IMPORTANCE = High);
+</code>
+
+
+3. Workload isolation
+- reserves resources for a workload group
+- define the amount of resources that are assigned per request
+- workload groups are a mechanism to apply rules, such as query timeout, to requests
+
+
+<code>
+
+-- 1. create a workload Group called CEODemo
+IF NOT EXISTS (SELECT * FROM sys.workload_management_workload_groups where name = 'CEODemo')
+BEGIN
+Create WORKLOAD GROUP CEODemo WITH
+( MIN_PERCENTAGE_RESOURCE = 50        -- integer value
+,REQUEST_MIN_RESOURCE_GRANT_PERCENT = 25 --  factor is 50, then 2 concurrency is guaranteed
+,CAP_PERCENTAGE_RESOURCE = 100
+)
+END
+
+
+-- 2. create a Workload Classifier called CEODreamDemo
+IF NOT EXISTS (SELECT * FROM sys.workload_management_workload_classifiers where  name = 'CEODreamDemo')
+BEGIN
+Create Workload Classifier CEODreamDemo with
+( Workload_Group ='CEODemo',MemberName='asa.sql.workload02',IMPORTANCE = BELOW_NORMAL);
+END
+
+
+-- 3. check what happen
+SELECT s.login_name, r.[Status], r.Importance, submit_time,
+start_time ,s.session_id FROM sys.dm_pdw_exec_sessions s
+JOIN sys.dm_pdw_exec_requests r ON s.session_id = r.session_id
+WHERE s.login_name IN ('asa.sql.workload02') and Importance
+is not NULL AND r.[status] in ('Running','Suspended')
+ORDER BY submit_time, status
+
+
+
+-- another script combined step 1,2
+IF  EXISTS (SELECT * FROM sys.workload_management_workload_classifiers where group_name = 'CEODemo')
+BEGIN
+Drop Workload Classifier CEODreamDemo
+DROP WORKLOAD GROUP CEODemo
+--- Creates a workload group 'CEODemo'.
+Create  WORKLOAD GROUP CEODemo WITH
+(MIN_PERCENTAGE_RESOURCE = 26 -- integer value
+,REQUEST_MIN_RESOURCE_GRANT_PERCENT = 3.25 -- factor of 26 (guaranteed more than 4 concurrencies)
+,CAP_PERCENTAGE_RESOURCE = 100
+)
+--- Creates a workload Classifier 'CEODreamDemo'.
+Create Workload Classifier CEODreamDemo with
+(Workload_Group ='CEODemo',MemberName='asa.sql.workload02',IMPORTANCE = BELOW_NORMAL);
+END
+
+</code>
+
+
+Title: Valid trigger of Azure Data Factory or Azure Synapse Analytics
+Catergory: Azure
+Sub-Category: DP-203
+
+1. Schedule trigger: wall-clock schedule
+2. Tumbling window trigger: periodic interval + retaining state
+3. Event-based trigger: response to an event
+- Storage event trigger: arrival/deletion of a file
+- Custom event trigger: handles custom articles in Event Grid
+
+
+Tumbling window trigger vs Schedule trigger:
+- Schedule trigger: "fire and forget" behavior
+- tumbling window trigger: waits for the triggered pipeline run to finish
+
+
+Title: Dynamic data masking
+Catergory: Azure
+Sub-Category: DP-203
+
+Default:
+- full masked according to the data type
+<pre>
+- Phone# varchar(12) MASKED WITH (FUNCTION = 'default()') NULL
+- FUNCTION = 'default()'
+</pre>
+
+Email:
+- aXXX@XXXX.com
+<pre>
+- ALTER COLUMN Email ADD MASKED WITH (FUNCTION = 'email()')
+</pre>
+
+Random:
+- use on any numeric type
+<pre>
+- Account_Number bigint MASKED WITH (FUNCTION = 'random([start range], [end range])')
+- ALTER COLUMN [Month] ADD MASKED WITH (FUNCTION = 'random(1, 12)')
+</pre>
+
+Custom String:
+- exposes the first and last letters
+- 555.123.1234 into 5XXXXXXX
+<pre>
+- FirstName varchar(100) MASKED WITH (FUNCTION = 'partial(prefix,[padding],suffix)') NULL
+- ALTER COLUMN [Phone Number] ADD MASKED WITH (FUNCTION = 'partial(1,"XXXXXXX",0)')
+</pre>
+
+Datetime:
+<pre>
+- ALTER COLUMN BirthDay ADD MASKED WITH (FUNCTION = 'datetime("Y")')
+- ALTER COLUMN BirthDay ADD MASKED WITH (FUNCTION = 'datetime("M")') --Month
+- ALTER COLUMN BirthDay ADD MASKED WITH (FUNCTION = 'datetime("m")') --minutes
+</pre>
+
+!! the masked value still can be guessed by using "where condition" to select
+
+
+Title: Diagnose the long time taken by SQL pool in Azure Synapse
+Catergory: Azure
+Sub-Category: DP-203
+
+How:
+- Click -> Monitor -> Metrics -> Scope
+
+Metrics:
+1. Cache hit percentage
+2. Cache used percentage
+
+
+Monitor for transactions that have rolled back
+-  sys.dm_pdw_nodes_tran_database_transactions
